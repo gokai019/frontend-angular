@@ -1,0 +1,11 @@
+.dialog-container {
+    padding: 20px;
+    min-width: 300px;
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    gap: 10px;
+  }

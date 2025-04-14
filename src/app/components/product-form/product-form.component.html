@@ -1,0 +1,129 @@
+<div class="product-form-container">
+  <div class="form-header">
+    <h2>{{ productId ? 'Editar' : 'Novo' }} Produto</h2>
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" (click)="saveProduct()">
+        <mat-icon>save</mat-icon> Salvar
+      </button>
+      <button mat-raised-button color="warn" (click)="deleteProduct()" *ngIf="productId" class="ml-10">
+        <mat-icon>delete</mat-icon> Excluir
+      </button>
+      <button mat-raised-button color="accent" routerLink="/produto" class="ml-10">
+        <mat-icon>arrow_back</mat-icon> Voltar
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="productForm" class="product-form">
+    <!-- Seção de Informações Básicas -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Informações Básicas</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descrição*</mat-label>
+            <input matInput formControlName="description" maxlength="60" required>
+            <mat-icon matSuffix>description</mat-icon>
+            <mat-error *ngIf="productForm.get('description')?.hasError('required')">
+              Descrição é obrigatória
+            </mat-error>
+            <mat-hint align="end">{{ productForm.get('description')?.value?.length || 0 }}/60</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Custo (R$)</mat-label>
+            <input matInput formControlName="cost" type="number" step="0.001" min="0">
+            <mat-icon matSuffix>attach_money</mat-icon>
+            <mat-error *ngIf="productForm.get('cost')?.hasError('pattern')">
+              Formato inválido (use 0.000)
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Seção de Imagem -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Imagem do Produto</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="image-upload-container">
+          <div class="image-preview" *ngIf="imageUrl">
+            <img [src]="imageUrl" alt="Preview da imagem do produto" class="product-image">
+            <button mat-mini-fab color="warn" class="remove-image-btn" (click)="removeImage()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <div class="upload-area" *ngIf="!imageUrl">
+            <input type="file" id="fileInput" (change)="onFileSelected($event)" accept=".jpg,.png,.jpeg" hidden>
+            <label for="fileInput" class="upload-label">
+              <mat-icon class="upload-icon">cloud_upload</mat-icon>
+              <span>Clique para adicionar uma imagem</span>
+              <span class="file-types">(JPG, PNG - Máx. 2MB)</span>
+            </label>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Seção de Preços -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Preços por Loja</mat-card-title>
+        <button mat-icon-button (click)="openPriceDialog()" matTooltip="Adicionar novo preço">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="prices.length === 0" class="no-prices">
+          <mat-icon>info</mat-icon>
+          <span>Nenhum preço cadastrado</span>
+        </div>
+
+        <table mat-table [dataSource]="prices" *ngIf="prices.length > 0" class="prices-table">
+          <!-- Coluna Loja -->
+          <ng-container matColumnDef="store">
+            <th mat-header-cell *matHeaderCellDef>Loja</th>
+            <td mat-cell *matCellDef="let price">
+              <div class="store-info">
+                <mat-icon>store</mat-icon>
+                <span>{{ price.store.description }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Coluna Preço -->
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Preço de Venda</th>
+            <td mat-cell *matCellDef="let price">
+              <div class="price-info">
+                <span>{{ price.salePrice | currency:'BRL':'symbol':'1.2-2' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Coluna Ações -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <td mat-cell *matCellDef="let price">
+              <button mat-icon-button color="primary" (click)="editPrice(price)" matTooltip="Editar preço">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deletePrice(price)" matTooltip="Remover preço">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="priceColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: priceColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</div>

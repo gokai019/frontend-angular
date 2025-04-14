@@ -1,0 +1,10 @@
+.dialog-container {
+    padding: 20px;
+    min-width: 400px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+  }

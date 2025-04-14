@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="header">
+    <h2>Consulta de Produto</h2>
+    <button mat-raised-button color="primary" routerLink="/produto/cadastro">Novo Produto</button>
+  </div>
+
+  <div class="filters">
+    <mat-form-field>
+      <input matInput placeholder="Código" [(ngModel)]="filters.id">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Descrição" [(ngModel)]="filters.description">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Custo" type="number" [(ngModel)]="filters.cost">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Preço de Venda" type="number" [(ngModel)]="filters.price">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="loadProducts()">Filtrar</button>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="loadProducts()">
+    <!-- Código Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+      <td mat-cell *matCellDef="let product">{{ product.id }}</td>
+    </ng-container>
+
+    <!-- Descrição Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+      <td mat-cell *matCellDef="let product">{{ product.description }}</td>
+    </ng-container>
+
+    <!-- Custo Column -->
+    <ng-container matColumnDef="cost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Custo</th>
+      <td mat-cell *matCellDef="let product">{{ product.cost | currency:'BRL':'symbol':'1.2-2' }}</td>
+    </ng-container>
+
+    <!-- Ações Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Ações</th>
+      <td mat-cell *matCellDef="let product">
+        <button mat-icon-button color="primary" (click)="editProduct(product.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteProduct(product)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator 
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>

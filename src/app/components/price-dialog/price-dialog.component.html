@@ -1,0 +1,42 @@
+<div class="dialog-container">
+  <h2>Adicionar Preço</h2>
+  
+  <form [formGroup]="priceForm">
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Loja*</mat-label>
+        <mat-select formControlName="storeId" required>
+          <mat-option *ngFor="let store of stores" [value]="store.id">
+            {{ store.id }} - {{ store.description }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="priceForm.get('storeId')?.hasError('required')">
+          Selecione uma loja
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Preço de Venda (R$)*</mat-label>
+        <input matInput formControlName="salePrice" type="number" step="0.001" required>
+        <mat-error *ngIf="priceForm.get('salePrice')?.hasError('required')">
+          Preço é obrigatório
+        </mat-error>
+        <mat-error *ngIf="priceForm.get('salePrice')?.hasError('pattern')">
+          Formato inválido (use 0.000)
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div class="button-row">
+    <button mat-button (click)="dialogRef.close()">Cancelar</button>
+    <button mat-raised-button 
+            color="primary" 
+            (click)="savePrice()"
+            [disabled]="priceForm.invalid">
+      Salvar
+    </button>
+  </div>
+</div>

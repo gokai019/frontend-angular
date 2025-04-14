@@ -1,0 +1,17 @@
+<div class="container">
+    <h2>Cadastro de Loja</h2>
+    
+    <form [formGroup]="storeForm">
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Descrição*</mat-label>
+          <input matInput formControlName="description" required>
+        </mat-form-field>
+      </div>
+  
+      <div class="button-row">
+        <button mat-raised-button color="primary" (click)="saveStore()">Salvar</button>
+        <button mat-raised-button color="warn" routerLink="/produto">Cancelar</button>
+      </div>
+    </form>
+  </div>
