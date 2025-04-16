@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule, RouterModule], // Adicione RouterModule
+  imports: [RouterOutlet, MatToolbarModule, RouterModule],
   template: `
     <router-outlet></router-outlet>
   `,

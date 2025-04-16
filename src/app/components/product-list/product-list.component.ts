@@ -15,6 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { CurrencyPipe } from '@angular/common';
 import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-product-list',
@@ -32,7 +34,10 @@ import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
     MatIconModule,
     CurrencyPipe,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
 })
 export class ProductListComponent implements OnInit {
@@ -48,7 +53,7 @@ export class ProductListComponent implements OnInit {
     id: '',
     description: '',
     cost: null,
-    price: null
+    salePrice: null
   };
 
   totalItems = 0;
@@ -80,7 +85,7 @@ export class ProductListComponent implements OnInit {
     if (this.sort) {
       this.sort.sortChange.subscribe((sort: Sort) => {
         this.currentSort = sort;
-        this.paginator.pageIndex = 0; // Reset to first page when sorting changes
+        this.paginator.pageIndex = 0; 
         this.loadProducts();
       });
     }
@@ -97,12 +102,12 @@ export class ProductListComponent implements OnInit {
     const currentPageIndex = this.paginator ? this.paginator.pageIndex : 0;
     const pageToLoad = currentPageIndex + 1;
     
-    // Include sorting parameters in the filters
     const filtersWithSort = {
       ...this.filters,
       sortBy: this.currentSort.active,
       sortOrder: this.currentSort.direction.toUpperCase()
     };
+    
     
     this.productService.getProducts(
       filtersWithSort, 
@@ -110,7 +115,7 @@ export class ProductListComponent implements OnInit {
       this.pageSize
     ).subscribe({
       next: (response) => {
-        if (response && response.data) {
+        if (response && response.data)  {
           this.dataSource.data = response.data;
           this.totalItems = response.count;
         }

@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-price-dialog',
@@ -24,7 +26,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule
   ],
 })
 export class PriceDialogComponent {
@@ -41,10 +45,13 @@ export class PriceDialogComponent {
     private snackBar: MatSnackBar
   ) {
     this.priceForm = this.fb.group({
-      storeId: ['', Validators.required],
+      storeId: [null, [  
+        Validators.required,
+        Validators.min(1) 
+      ]],
       salePrice: ['', [
         Validators.required,
-        Validators.pattern(/^\d+\.\d{3}$/)
+        Validators.min(0)
       ]]
     });
 
@@ -52,41 +59,35 @@ export class PriceDialogComponent {
   }
 
   loadStores() {
-    this.storeService.getStores().subscribe(stores => {
-      this.stores = stores;
-      
-      if (this.data.existingPrices) {
-        const existingStoreIds = this.data.existingPrices.map((p: any) => p.storeId);
-        this.stores = this.stores.filter(store => 
-          !existingStoreIds.includes(store.id)
-        );
+    this.storeService.getStores().subscribe({
+      next: stores => {
+        
+        this.stores = stores;
+        
+        if (this.data.existingPrices) {
+
+          const existingStoreIds = this.data.existingPrices.map((p: any) => p.storeId);
+
+          this.stores = this.stores.filter(store => {
+            const isIncluded = existingStoreIds.includes(store.id);
+            return !isIncluded;
+          });
+        }
+        
+      },
+      error: err => {
+        console.error('Erro ao carregar lojas:', err); 
       }
     });
   }
-
   savePrice() {
-    if (this.priceForm.invalid) {
-      this.snackBar.open('Preencha todos os campos', 'Fechar', { duration: 5000 });
-      return;
-    }
+    if (this.priceForm.invalid) return;
   
     const priceData = {
       storeId: Number(this.priceForm.value.storeId),
       salePrice: Number(this.priceForm.value.salePrice)
     };
   
-    // Se estiver criando (sem productId), retorna os dados para o form principal
-    if (this.data.isCreating) {
-      this.dialogRef.close(priceData);
-      return;
-    }
-  
-    // Se tiver productId, faz a chamada API normal
-    this.productService.addProductPrice(this.data.productId, priceData).subscribe({
-      next: (response) => this.dialogRef.close(response),
-      error: (error) => {
-        this.snackBar.open('Erro ao salvar preço: ' + error.message, 'Fechar', { duration: 5000 });
-      }
-    });
+    this.dialogRef.close(priceData);
   }
 }

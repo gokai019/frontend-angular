@@ -15,8 +15,7 @@
   </div>
 
   <form [formGroup]="productForm" class="product-form">
-    <!-- Seção de Informações Básicas -->
-    <mat-card class="form-section">
+    <mat-card  class="form-section with-header">
       <mat-card-header>
         <mat-card-title>Informações Básicas</mat-card-title>
       </mat-card-header>
@@ -36,18 +35,14 @@
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Custo (R$)</mat-label>
-            <input matInput formControlName="cost" type="number" step="0.001" min="0">
+            <input matInput formControlName="cost" type="number" step="0.01" >
             <mat-icon matSuffix>attach_money</mat-icon>
-            <mat-error *ngIf="productForm.get('cost')?.hasError('pattern')">
-              Formato inválido (use 0.000)
-            </mat-error>
           </mat-form-field>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- Seção de Imagem -->
-    <mat-card class="form-section">
+    <!-- <mat-card class="form-section">
       <mat-card-header>
         <mat-card-title>Imagem do Produto</mat-card-title>
       </mat-card-header>
@@ -69,15 +64,19 @@
           </div>
         </div>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
 
-    <!-- Seção de Preços -->
     <mat-card class="form-section">
-      <mat-card-header>
+      <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
         <mat-card-title>Preços por Loja</mat-card-title>
-        <button mat-icon-button (click)="openPriceDialog()" matTooltip="Adicionar novo preço">
-          <mat-icon>add_circle</mat-icon>
-        </button>
+        <div>
+          <button mat-icon-button (click)="openStoreDialog()" matTooltip="Cadastrar nova loja" color="accent" class="mr-10">
+            <mat-icon>add_business</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openPriceDialog()" matTooltip="Adicionar novo preço" color="primary">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
       </mat-card-header>
       <mat-card-content>
         <div *ngIf="prices.length === 0" class="no-prices">
@@ -85,41 +84,39 @@
           <span>Nenhum preço cadastrado</span>
         </div>
 
-        <table mat-table [dataSource]="prices" *ngIf="prices.length > 0" class="prices-table">
-          <!-- Coluna Loja -->
+        <table mat-table [dataSource]="prices" class="prices-table" *ngIf="prices.length > 0">
           <ng-container matColumnDef="store">
-            <th mat-header-cell *matHeaderCellDef>Loja</th>
-            <td mat-cell *matCellDef="let price">
+            <th mat-header-cell *matHeaderCellDef> Loja </th>
+            <td mat-cell *matCellDef="let price"> 
               <div class="store-info">
                 <mat-icon>store</mat-icon>
-                <span>{{ price.store.description }}</span>
+                {{price.store?.description || 'Loja ' + price.storeId}}
               </div>
             </td>
           </ng-container>
-
-          <!-- Coluna Preço -->
+        
           <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Preço de Venda</th>
+            <th mat-header-cell *matHeaderCellDef> Preço </th>
             <td mat-cell *matCellDef="let price">
               <div class="price-info">
-                <span>{{ price.salePrice | currency:'BRL':'symbol':'1.2-2' }}</span>
+                <mat-icon>attach_money</mat-icon>
+                {{price.salePrice | currency:'BRL':'symbol':'1.2-2'}}
               </div>
             </td>
           </ng-container>
-
-          <!-- Coluna Ações -->
+        
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <th mat-header-cell *matHeaderCellDef> Ações </th>
             <td mat-cell *matCellDef="let price">
-              <button mat-icon-button color="primary" (click)="editPrice(price)" matTooltip="Editar preço">
+              <button mat-icon-button color="primary" (click)="editPrice(price)" matTooltip="Editar">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="deletePrice(price)" matTooltip="Remover preço">
+              <button mat-icon-button color="warn" (click)="deletePrice(price)" matTooltip="Excluir">
                 <mat-icon>delete</mat-icon>
               </button>
             </td>
           </ng-container>
-
+        
           <tr mat-header-row *matHeaderRowDef="priceColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: priceColumns;"></tr>
         </table>

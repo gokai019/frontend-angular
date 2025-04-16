@@ -8,3 +8,15 @@
     gap: 15px;
     margin-bottom: 20px;
   }
+
+  .mat-select-panel-custom {
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  .price-dialog-select .mat-select-panel {
+    background: white !important;
+    min-width: 100% !important;
+    margin-top: 8px !important;
+  }

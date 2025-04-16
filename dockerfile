@@ -1,22 +1,23 @@
-# Estágio de desenvolvimento
-FROM node:18-alpine as development
+FROM node:18 AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
-COPY . .
-CMD ["npm", "start"]
 
-# Estágio de construção
-FROM node:18-alpine as builder
-WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm install
-COPY . .
-RUN npm run build
 
-# Estágio de produção
-FROM nginx:alpine as production
-COPY --from=builder /app/dist/frontend /usr/share/nginx/html
+COPY . .
+RUN npm run build --prod
+
+FROM nginx:alpine
+
+RUN rm -rf /usr/share/nginx/html/* && \
+    rm -f /etc/nginx/conf.d/default.conf
+
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html/
+
 COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

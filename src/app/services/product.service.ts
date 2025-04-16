@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class ProductService {
       .set('page', page.toString())
       .set('limit', limit.toString());
 
-    // Add sorting parameters if they exist
     if (filters.sortBy) {
       params = params.set('sortBy', filters.sortBy);
     }
@@ -24,7 +23,6 @@ export class ProductService {
       params = params.set('sortOrder', filters.sortOrder);
     }
 
-    // Add other filters
     Object.keys(filters).forEach(key => {
       if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '' && 
           key !== 'sortBy' && key !== 'sortOrder') {
@@ -45,15 +43,30 @@ export class ProductService {
   }
 
   updateProduct(id: number, productData: any): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}`, productData);
+    if (productData instanceof FormData) {
+      return this.http.patch(`${this.apiUrl}/${id}`, productData);
+    } 
+    else {
+      return this.http.patch(`${this.apiUrl}/${id}`, productData, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
   }
 
   deleteProduct(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
-
+  
   addProductPrice(productId: number, priceData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${productId}/prices`, priceData);
+    if (!priceData.storeId || priceData.storeId <= 0) {
+      return throwError(() => new Error('Store ID inválido'));
+    }
+
+    const payload = {
+      storeId: Number(priceData.storeId),
+      salePrice: Number(priceData.salePrice)
+    };
+    return this.http.post(`${this.apiUrl}/${productId}/prices`, payload);
   }
 
   removeProductPrice(productId: number, priceId: number): Observable<any> {

@@ -1,42 +1,376 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-.success-snackbar {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .error-snackbar {
-    background-color: #f44336;
-    color: white;
-  }
+:root {
+  --primary-color: #3f51b5;
+  --accent-color: #ff4081;
+  --warn-color: #f44336;
+  --background-color: #f8f9fa;
+  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --card-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  --border-radius: 8px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+}
 
-  .container {
-    padding: 20px;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .filters {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-  
-  mat-form-field {
-    flex: 1 1 200px;
-  }
-  
-  table {
-    width: 100%;
-  }
-  
-  .mat-column-actions {
-    width: 120px;
-    text-align: center;
-  }
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Card Styling - Existing styles remain */
+mat-card {
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.3s ease;
+  margin-bottom: var(--spacing-lg);
+  overflow: hidden;
+}
+
+mat-card:hover {
+  box-shadow: var(--card-hover-shadow);
+}
+
+mat-card-header {
+  background-color: rgba(63, 81, 181, 0.05);
+  padding: var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+mat-card-title {
+  font-weight: 500;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+mat-card-content {
+  padding: var(--spacing-md);
+}
+
+/* Form Styling - Existing styles remain */
+.form-row {
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Fix for transparent dropdowns - Existing styles remain */
+.mat-select-panel {
+  background-color: white !important;
+}
+
+.mat-option {
+  background-color: white !important;
+}
+
+.mat-option:hover {
+  background-color: rgba(63, 81, 181, 0.1) !important;
+}
+
+/* Fix for dropdown specifically in price dialog - Existing styles remain */
+.price-dialog-select .mat-select-panel {
+  background-color: white !important;
+  min-width: calc(100% + 32px) !important;
+  margin-left: -16px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Button Styling - Existing styles remain */
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+button[mat-raised-button] {
+  border-radius: 20px; /* Arredonda os botões raised */
+  padding: 0 var(--spacing-md);
+  min-width: 100px;
+  height: 40px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+button[mat-raised-button]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button[mat-button] {
+  border-radius: 20px; /* Arredonda os botões flat */
+  padding: 0 var(--spacing-md);
+  min-width: 80px;
+  height: 36px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease;
+}
+
+button[mat-button]:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+button[mat-icon-button] {
+  border-radius: 50%; /* Arredonda os botões de ícone */
+  transition: background-color 0.3s ease;
+}
+
+button[mat-icon-button]:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Table Styling - Existing styles remain */
+table.mat-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: var(--card-shadow);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+th.mat-header-cell {
+  font-weight: 600;
+  color: var(--primary-color);
+  background-color: rgba(63, 81, 181, 0.05);
+  padding: var(--spacing-md);
+  text-align: left;
+}
+
+td.mat-cell {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+tr.mat-row:hover {
+  background-color: rgba(63, 81, 181, 0.03);
+}
+
+/* Dialog Styling - Existing styles remain */
+.dialog-container {
+  padding: var(--spacing-lg);
+  min-width: 400px;
+  border-radius: var(--border-radius);
+}
+
+.dialog-container h2 {
+  margin-top: 0;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* Image Upload Area - Existing styles remain */
+.upload-area {
+  border: 2px dashed #ccc;
+  border-radius: var(--border-radius);
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(63, 81, 181, 0.03);
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Prices Table - Existing styles remain */
+.prices-table {
+  box-shadow: var(--card-shadow);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-top: var(--spacing-lg);
+}
+
+.no-prices {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  color: #757575;
+  border: 1px dashed #ccc;
+}
+
+/* Store Form - Existing styles remain */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  margin-top: var(--spacing-lg);
+}
+
+/* Paginator - Existing styles remain */
+mat-paginator {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Snackbar styling - Existing styles remain */
+.success-snackbar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.error-snackbar {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Product list container - Existing styles remain */
+.product-list-container {
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--card-shadow);
+}
+
+.header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.header h2 {
+  margin: 0;
+  color: var(--primary-color);
+}
+
+/* Fix for transparent dropdowns in dialogs - Existing styles remain */
+.mat-select-panel-wrap .mat-select-panel {
+  background-color: white !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Form field styling - Existing styles remain */
+mat-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: rgba(0, 0, 0, 0.12);
+}
+
+mat-form-field.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--primary-color);
+}
+
+/* Product image styling - Existing styles remain */
+.product-image {
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.05);
+}
+
+.image-preview {
+  margin: var(--spacing-md) 0;
+}
+
+.remove-image-btn {
+  background-color: var(--warn-color);
+  color: white;
+}
+
+/* Espaçamento para headers - Existing styles remain */
+mat-card-header {
+  margin-bottom: 16px;
+}
+
+/* Dropdown customizado - Existing styles remain */
+.mat-select-panel-custom {
+  border-radius: 12px !important;
+  margin-top: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.mat-select-panel-custom .mat-option {
+  padding: 8px 16px;
+}
+
+/* Ajuste para o dropdown do price-dialog - Existing styles remain */
+.price-dialog-select .mat-select-panel {
+  min-width: calc(100% + 32px) !important;
+  margin-left: -16px !important;
+}
+
+/* Espaçamento adicional para cards com headers - Existing styles remain */
+mat-card.with-header mat-card-content {
+  padding-top: 8px;
+}
+
+
+/* Make input fields more rounded - Existing styles remain */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 28px !important;
+}
+
+/* Also update the inputs themselves - Existing styles remain */
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 12px 0;
+}
+
+/* Make sure the focus outline follows the same border radius - Existing styles remain */
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  border-radius: 28px !important;
+}
+
+mat-card.with-header mat-card-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: rgba(63, 81, 181, 0.05);
+}
+
+mat-card.with-header mat-card-header mat-card-title {
+  margin: 0;
+  flex: 1;
+}
+
+/* Ajusta o espaçamento dos form fields - Existing styles remain */
+.mat-form-field {
+  margin-bottom: 8px;
+}
+
+/* Corrige o alinhamento dos ícones nos inputs - Existing styles remain */
+.mat-form-field-suffix {
+  align-self: center;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 28px !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-flex {
+  border-radius: 28px !important;
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

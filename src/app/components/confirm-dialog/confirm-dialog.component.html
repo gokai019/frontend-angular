@@ -1,9 +1,13 @@
 <div class="dialog-container">
-    <h2>{{ data.title }}</h2>
-    <p>{{ data.message }}</p>
-    
-    <div class="button-row">
-      <button mat-button (click)="dialogRef.close(false)">Cancelar</button>
-      <button mat-raised-button color="warn" (click)="dialogRef.close(true)">Confirmar</button>
-    </div>
+  <h2>{{ data.title }}</h2>
+  <p>{{ data.message }}</p>
+  
+  <div class="button-row">
+    <button mat-button (click)="dialogRef.close(false)">
+      <mat-icon>cancel</mat-icon> Cancelar
+    </button>
+    <button mat-raised-button color="warn" (click)="dialogRef.close(true)">
+      <mat-icon>check</mat-icon> Confirmar
+    </button>
   </div>
+</div>
