@@ -8,6 +8,10 @@ Este repositório contém o frontend do Sistema de Gerenciamento de Produtos, de
 - Angular CLI (v19 ou superior)
 - Docker e Docker Compose (opcional, para ambiente containerizado)
 
+### Recomendações
+
+``` Rodar no docker para facilitar ```
+
 ## Configuração do Ambiente
 
 ### Instalação de Dependências
