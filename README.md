@@ -1,59 +1,159 @@
-# Frontend
+# Product Management System - Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+Este repositório contém o frontend do Sistema de Gerenciamento de Produtos, desenvolvido com Angular 19.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js (v18 ou superior)
+- Angular CLI (v19 ou superior)
+- Docker e Docker Compose (opcional, para ambiente containerizado)
+
+## Configuração do Ambiente
+
+### Instalação de Dependências
+
+Execute o seguinte comando para instalar as dependências:
 
 ```bash
+npm install
+```
+
+### Instalação do Angular CLI
+
+Se você ainda não tem o Angular CLI instalado:
+
+```bash
+npm install -g @angular/cli
+```
+
+## Executando o Projeto
+
+### Modo de Desenvolvimento
+
+```bash
+npm start
+# ou
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Por padrão, a aplicação será executada em `http://localhost:4200`.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Opções adicionais:
 
 ```bash
-ng generate component component-name
+# Para permitir acesso externo
+ng serve --host 0.0.0.0
+
+# Para usar uma porta diferente
+ng serve --port 4201
+
+# Para abrir automaticamente no navegador
+ng serve --open
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Build para Produção
 
 ```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
+npm run build
+# ou
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Os arquivos compilados serão armazenados no diretório `dist/frontend/browser`.
 
-## Running unit tests
+## Testes
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Executando Testes Unitários
 
 ```bash
+npm test
+# ou
 ng test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Modo de Observação para Testes
 
 ```bash
-ng e2e
+ng test --watch
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Cobertura de Testes
 
-## Additional Resources
+```bash
+ng test --code-coverage
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Os relatórios de cobertura serão gerados no diretório `coverage/`.
+
+## Docker
+
+### Construir e Iniciar o Contêiner
+
+```bash
+docker-compose up -d
+```
+
+A aplicação estará disponível em `http://localhost:80`.
+
+### Parar o Contêiner
+
+```bash
+docker-compose down
+```
+
+### Construir Imagem Docker Manualmente
+
+```bash
+docker build -t product-management-frontend .
+```
+
+### Executar Contêiner Manualmente
+
+```bash
+docker run -p 80:80 product-management-frontend
+```
+
+## Estrutura do Projeto
+
+```
+src/
+├── app/
+│   ├── components/    # Componentes da aplicação
+│   ├── models/        # Interfaces e classes de modelo
+│   ├── services/      # Serviços para comunicação com a API
+│   ├── shared/        # Componentes, diretivas e pipes compartilhados
+│   └── app.module.ts  # Módulo principal da aplicação
+├── assets/           # Recursos estáticos
+├── environments/     # Configurações de ambiente
+└── index.html        # HTML principal
+```
+
+## Configuração de Proxy para Desenvolvimento
+
+Se necessário, você pode configurar um proxy para redirecionar as requisições da API durante o desenvolvimento. Crie um arquivo `proxy.conf.json` na raiz do projeto:
+
+```json
+{
+  "/api": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
+```
+
+E execute com:
+
+```bash
+ng serve --proxy-config proxy.conf.json
+```
+
+## Configuração do Nginx
+
+O arquivo `nginx.conf` incluído configura o servidor Nginx para:
+
+1. Servir a aplicação Angular
+2. Redirecionar as requisições da API para o backend
+3. Lidar corretamente com o roteamento Angular
+
+Este arquivo é usado automaticamente quando a aplicação é executada em contêineres Docker.
